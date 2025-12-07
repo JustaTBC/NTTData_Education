@@ -151,12 +151,51 @@
         "FROM nttdataeducacao.gold.agg_itens_por_area\r\n",
         "ORDER BY total_itens DESC;\r\n"
       ]
+    },
+    {
+      "name": "19aaabdb",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `default`;\n",
+        "\n",
+        "USE CATALOG nttdataeducacao;\n",
+        "USE SCHEMA gold;\n",
+        "\n",
+        "SELECT\n",
+        "    -- 1. Chave de agrupamento\n",
+        "    area_extensa,\n",
+        "\n",
+        "    -- 2. Totais gerais\n",
+        "    total_itens,\n",
+        "    total_anulados,\n",
+        "    total_invalidos,\n",
+        "    total_itens_adaptados,\n",
+        "\n",
+        "    -- 3. Médias dos parâmetros TRI\n",
+        "    media_dificuldade,\n",
+        "    media_discriminacao,\n",
+        "    media_acerto_ao_acaso,\n",
+        "\n",
+        "    -- 4. Contagem por classificação de dificuldade\n",
+        "    qtd_muito_facil,\n",
+        "    qtd_facil,\n",
+        "    qtd_medio,\n",
+        "    qtd_dificil,\n",
+        "\n",
+        "    -- 5. Proporções gerais\n",
+        "    proporcao_anulados,\n",
+        "    proporcao_adaptados\n",
+        "\n",
+        "FROM nttdataeducacao.gold.agg_itens_por_area\n",
+        "ORDER BY total_itens DESC;\n"
+      ]
     }
   ],
   "pages": [
     {
       "name": "21dd94aa",
-      "displayName": "Untitled Page",
+      "displayName": "Dashboard 1",
       "layout": [
         {
           "widget": {
@@ -517,6 +556,45 @@
             "x": 0,
             "y": 11,
             "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "4dc8ff72",
+            "queries": [
+              {
+                "name": "07598521bf104a9fbce4b199653be62d",
+                "query": {
+                  "datasetName": "19aaabdb",
+                  "fields": [
+                    {
+                      "name": "area_extensa",
+                      "expression": "`area_extensa`"
+                    },
+                    {
+                      "name": "column_c1a5d3a5213",
+                      "expression": "SUM(`total_itens`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 0,
+              "viz_spec": {
+                "display_name": "Visualization 1",
+                "viz_type": "CHART",
+                "serialized_options": "{\"isAggregationOn\":true,\"series\":{\"error_y\":{\"type\":\"data\",\"visible\":true},\"stacking\":null},\"coefficient\":1,\"yAxis\":[{\"type\":\"-\"},{\"opposite\":true,\"type\":\"-\"}],\"columnConfigurationMap\":{\"x\":{\"column\":\"area_extensa\",\"id\":\"column_c1a5d3a5211\"},\"y\":[{\"column\":\"total_itens\",\"id\":\"column_c1a5d3a5213\",\"transform\":\"SUM\"}]},\"alignYAxesAtZero\":true,\"direction\":{\"type\":\"counterclockwise\"},\"swappedAxes\":false,\"percentFormat\":\"0[.]00%\",\"textFormat\":\"\",\"legend\":{\"traceorder\":\"normal\"},\"globalSeriesType\":\"column\",\"version\":2,\"sizemode\":\"diameter\",\"seriesOptions\":{\"column_c1a5d3a5213\":{\"type\":\"column\",\"yAxis\":0}},\"error_y\":{\"type\":\"data\",\"visible\":true},\"sortX\":true,\"showDataLabels\":false,\"missingValuesAsZero\":true,\"useAggregationsUi\":true,\"numberFormat\":\"0,0.[00000]\",\"dateTimeFormat\":\"DD/MM/YYYY HH:mm\",\"sortY\":true,\"valuesOptions\":{},\"xAxis\":{\"labels\":{\"enabled\":true},\"type\":\"-\"}}",
+                "query_name": "07598521bf104a9fbce4b199653be62d"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 17,
+            "width": 3,
             "height": 6
           }
         }
