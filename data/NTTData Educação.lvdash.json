@@ -115,6 +115,42 @@
         "ORDER BY media_escola_total DESC\n",
         "LIMIT 100"
       ]
+    },
+    {
+      "name": "acc90d4b",
+      "displayName": "Resumo por tipo de prova",
+      "queryLines": [
+        "USE CATALOG nttdataeducacao;\r\n",
+        "USE SCHEMA gold;\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "    -- 1. Chave de agrupamento\r\n",
+        "    area_extensa,\r\n",
+        "\r\n",
+        "    -- 2. Totais gerais\r\n",
+        "    total_itens,\r\n",
+        "    total_anulados,\r\n",
+        "    total_invalidos,\r\n",
+        "    total_itens_adaptados,\r\n",
+        "\r\n",
+        "    -- 3. Médias dos parâmetros TRI\r\n",
+        "    media_dificuldade,\r\n",
+        "    media_discriminacao,\r\n",
+        "    media_acerto_ao_acaso,\r\n",
+        "\r\n",
+        "    -- 4. Contagem por classificação de dificuldade\r\n",
+        "    qtd_muito_facil,\r\n",
+        "    qtd_facil,\r\n",
+        "    qtd_medio,\r\n",
+        "    qtd_dificil,\r\n",
+        "\r\n",
+        "    -- 5. Proporções gerais\r\n",
+        "    proporcao_anulados,\r\n",
+        "    proporcao_adaptados\r\n",
+        "\r\n",
+        "FROM nttdataeducacao.gold.agg_itens_por_area\r\n",
+        "ORDER BY total_itens DESC;\r\n"
+      ]
     }
   ],
   "pages": [
