@@ -1,0 +1,596 @@
+{
+  "datasets": [
+    {
+      "name": "ac58e80c",
+      "displayName": "Rank Estados",
+      "queryLines": [
+        "USE CATALOG `nttdataeducacao`;\n",
+        "USE SCHEMA `gold`;\n",
+        "\n",
+        "SELECT \n",
+        "    -- 1. Chave do Mapa\n",
+        "    exam_state,\n",
+        "\n",
+        "    -- 2. Contexto (Quantos alunos)\n",
+        "    total_inscritos,\n",
+        "\n",
+        "    -- 3. A Média Geral (Dividida por 5, pois veio da soma 0-5000)\n",
+        "    (media_geral / 5) as media_geral_enem,\n",
+        "\n",
+        "    -- 4. As Matérias Específicas (NÃO DIVIDE, já são 0-1000)\n",
+        "    media_redacao,\n",
+        "    media_matematica,\n",
+        "    media_linguagens,\n",
+        "    media_humanas,\n",
+        "    media_natureza\n",
+        "\n",
+        "FROM nttdataeducacao.gold.agg_performance_estado\n",
+        "\n",
+        "ORDER BY media_geral_enem DESC"
+      ]
+    },
+    {
+      "name": "17d1a708",
+      "displayName": "Tipo de Escolas",
+      "queryLines": [
+        "USE CATALOG `nttdataeducacao`;\n",
+        "USE SCHEMA `gold`;\n",
+        "\n",
+        "SELECT \n",
+        "    -- 1. Eixo X: O Tipo de Escola (Já vem pronto dessa tabela)\n",
+        "    tipo_escola,\n",
+        "    \n",
+        "    -- 2. Contexto: Quantidade de Alunos (Para Tooltip)\n",
+        "    qtd_alunos,\n",
+        "\n",
+        "    -- 3. Eixo Y: Médias Ajustadas (Dividido por 5 para escala 0-1000)\n",
+        "    (media_geral / 5) as media_geral_enem,\n",
+        "  media_redacao, \n",
+        "  media_matematica,\n",
+        "  media_escola_linguagens as media_linguagens, -- Renomeando pra ficar curto\n",
+        "    media_escola_humanas as media_humanas,\n",
+        "    media_escola_natureza as media_natureza\n",
+        "\n",
+        "FROM nttdataeducacao.gold.agg_publica_vs_privada\n",
+        "\n",
+        "-- Opcional: Filtra \"Outros\" se quiser focar só nas principais\n",
+        "WHERE tipo_escola <> 'Outros'\n",
+        "\n",
+        "ORDER BY media_geral_enem DESC"
+      ]
+    },
+    {
+      "name": "ae7128a4",
+      "displayName": "Top 10 Escolas",
+      "queryLines": [
+        "USE CATALOG `nttdataeducacao`;\n",
+        "USE SCHEMA `gold`;\n",
+        "\n",
+        "SELECT \n",
+        "    -- 1. Cria um rótulo legível: \"Nome da Cidade (ID: 12345)\"\n",
+        "    concat(school_city, ' (ID: ', cast(school_id as string), ')') as escola_label,\n",
+        "    school_state,\n",
+        "    \n",
+        "    -- 2. A nota média para o tamanho da barra\n",
+        "    (media_escola_total / 5) as media_padrao_enem\n",
+        "\n",
+        "FROM nttdataeducacao.gold.agg_ranking_escolas\n",
+        "\n",
+        "WHERE school_id <> -1  -- Remove alunos sem escola definida\n",
+        "\n",
+        "ORDER BY media_escola_total DESC -- Ordena do maior para o menor\n",
+        "\n",
+        "LIMIT 10 -- Pega apenas as 10 melhores para o gráfico não quebrar"
+      ]
+    },
+    {
+      "name": "71004620",
+      "displayName": "Junção das Notas",
+      "queryLines": [
+        "USE CATALOG `nttdataeducacao`;\n",
+        "USE SCHEMA `gold`;\n",
+        "\n",
+        "SELECT \n",
+        "    -- 1. IMPORTANTE: Traga o estado para o filtro funcionar (pode deixar escondido)\n",
+        "    school_state, \n",
+        "\n",
+        "    -- 2. O Label (Nome da Escola)\n",
+        "    concat(school_city, ' (ID: ', cast(school_id as string), ')') as escola_label,\n",
+        "\n",
+        "    -- 3. As Matérias (Empilhadas)\n",
+        "    round(media_escola_redacao, 0) as Redacao,\n",
+        "    round(media_escola_matematica, 0) as Matematica,\n",
+        "    round(media_escola_linguagens, 0) as Linguagens,\n",
+        "    round(media_escola_humanas, 0) as Humanas,\n",
+        "    round(media_escola_natureza, 0) as Natureza,\n",
+        "    \n",
+        "    -- 4. O Total (Para ordenar)\n",
+        "    media_escola_total\n",
+        "\n",
+        "FROM nttdataeducacao.gold.agg_ranking_escolas\n",
+        "WHERE school_id <> -1\n",
+        "\n",
+        "-- O Filtro do Dashboard vai ser injetado automagicamente AQUI pelo Databricks\n",
+        "\n",
+        "ORDER BY media_escola_total DESC\n",
+        "LIMIT 100"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "21dd94aa",
+      "displayName": "Untitled Page",
+      "layout": [
+        {
+          "widget": {
+            "name": "1f93c2b7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ac58e80c",
+                  "fields": [
+                    {
+                      "name": "exam_state",
+                      "expression": "`exam_state`"
+                    },
+                    {
+                      "name": "total_inscritos",
+                      "expression": "`total_inscritos`"
+                    },
+                    {
+                      "name": "media_geral_enem",
+                      "expression": "`media_geral_enem`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "total_inscritos",
+                  "axis": {
+                    "title": "Total de Alunos"
+                  },
+                  "displayName": "Total de Alunos",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "media_geral_enem",
+                  "axis": {
+                    "title": "Média geral do ENEM"
+                  },
+                  "displayName": "Média geral do ENEM",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "exam_state",
+                  "displayName": "Estados",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Visualization 1",
+                "showTitle": true
+              },
+              "mark": {
+                "layout": "layer",
+                "size": 2.8
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "ed64caca",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "17d1a708",
+                  "fields": [
+                    {
+                      "name": "tipo_escola",
+                      "expression": "`tipo_escola`"
+                    },
+                    {
+                      "name": "sum(media_redacao)",
+                      "expression": "SUM(`media_redacao`)"
+                    },
+                    {
+                      "name": "sum(media_matematica)",
+                      "expression": "SUM(`media_matematica`)"
+                    },
+                    {
+                      "name": "sum(media_linguagens)",
+                      "expression": "SUM(`media_linguagens`)"
+                    },
+                    {
+                      "name": "sum(media_humanas)",
+                      "expression": "SUM(`media_humanas`)"
+                    },
+                    {
+                      "name": "sum(media_natureza)",
+                      "expression": "SUM(`media_natureza`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "tipo_escola",
+                  "axis": {
+                    "title": "Tipo de escola"
+                  },
+                  "displayName": "Tipo de escola",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "sum(media_redacao)",
+                      "displayName": "Média da Redação"
+                    },
+                    {
+                      "fieldName": "sum(media_matematica)",
+                      "displayName": "Média da Matemática"
+                    },
+                    {
+                      "fieldName": "sum(media_linguagens)",
+                      "displayName": "Média de Linguagens"
+                    },
+                    {
+                      "fieldName": "sum(media_humanas)",
+                      "displayName": "Média de Humanas"
+                    },
+                    {
+                      "fieldName": "sum(media_natureza)",
+                      "displayName": "Média de Natureza"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative",
+                    "domain": {
+                      "min": 400
+                    },
+                    "reverse": false
+                  },
+                  "axis": {
+                    "title": "Média"
+                  }
+                },
+                "color": {
+                  "legend": {
+                    "position": "bottom"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Visualization 1",
+                "showTitle": true
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "3effe9be",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ae7128a4",
+                  "fields": [
+                    {
+                      "name": "sum(media_padrao_enem)",
+                      "expression": "SUM(`media_padrao_enem`)"
+                    },
+                    {
+                      "name": "escola_label",
+                      "expression": "`escola_label`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(media_padrao_enem)",
+                  "displayName": "media_padrao_enem",
+                  "scale": {
+                    "type": "quantitative",
+                    "domain": {
+                      "min": 700,
+                      "max": 800
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "escola_label",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Top 10 Escolas - Média Geral",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#077A9D"
+                ],
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "34fe1b2f",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "71004620",
+                  "fields": [
+                    {
+                      "name": "sum(Redacao)",
+                      "expression": "SUM(`Redacao`)"
+                    },
+                    {
+                      "name": "sum(Matematica)",
+                      "expression": "SUM(`Matematica`)"
+                    },
+                    {
+                      "name": "sum(Linguagens)",
+                      "expression": "SUM(`Linguagens`)"
+                    },
+                    {
+                      "name": "sum(Humanas)",
+                      "expression": "SUM(`Humanas`)"
+                    },
+                    {
+                      "name": "sum(Natureza)",
+                      "expression": "SUM(`Natureza`)"
+                    },
+                    {
+                      "name": "escola_label",
+                      "expression": "`escola_label`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`school_state` IN (`school_state`) OR TRUE"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fields": [
+                    {
+                      "fieldName": "sum(Redacao)",
+                      "displayName": "Redação"
+                    },
+                    {
+                      "fieldName": "sum(Matematica)",
+                      "displayName": "Matemática"
+                    },
+                    {
+                      "fieldName": "sum(Linguagens)",
+                      "displayName": "Linguagens"
+                    },
+                    {
+                      "fieldName": "sum(Humanas)",
+                      "displayName": "Humanas"
+                    },
+                    {
+                      "fieldName": "sum(Natureza)",
+                      "displayName": "Natureza"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative",
+                    "reverse": false
+                  }
+                },
+                "y": {
+                  "fieldName": "escola_label",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "title": "Notas Compostas - top 10",
+                "showTitle": true
+              },
+              "mark": {
+                "layout": "stack"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "af73149e",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "0095d5b4",
+            "queries": [
+              {
+                "name": "dashboards/01f0cd6c4cf5143a88371549bf9fa178/datasets/01f0cd6c4cf518b88dd4f7fc6c89ca24_exam_state",
+                "query": {
+                  "datasetName": "ac58e80c",
+                  "fields": [
+                    {
+                      "name": "exam_state",
+                      "expression": "`exam_state`"
+                    },
+                    {
+                      "name": "exam_state_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f0cd6c4cf5143a88371549bf9fa178/datasets/01f0cd6f212a13dc999c3383c846ab10_school_state",
+                "query": {
+                  "datasetName": "71004620",
+                  "fields": [
+                    {
+                      "name": "school_state",
+                      "expression": "`school_state`"
+                    },
+                    {
+                      "name": "school_state_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f0cd6c4cf5143a88371549bf9fa178/datasets/01f0cd6d2ae9126c9a3fe3761f5714d3_school_state",
+                "query": {
+                  "datasetName": "ae7128a4",
+                  "fields": [
+                    {
+                      "name": "school_state",
+                      "expression": "`school_state`"
+                    },
+                    {
+                      "name": "school_state_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "exam_state",
+                    "queryName": "dashboards/01f0cd6c4cf5143a88371549bf9fa178/datasets/01f0cd6c4cf518b88dd4f7fc6c89ca24_exam_state"
+                  },
+                  {
+                    "fieldName": "school_state",
+                    "queryName": "dashboards/01f0cd6c4cf5143a88371549bf9fa178/datasets/01f0cd6f212a13dc999c3383c846ab10_school_state"
+                  },
+                  {
+                    "fieldName": "school_state",
+                    "queryName": "dashboards/01f0cd6c4cf5143a88371549bf9fa178/datasets/01f0cd6d2ae9126c9a3fe3761f5714d3_school_state"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS"
+    },
+    {
+      "name": "c33a3f47",
+      "displayName": "Untitled page",
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
