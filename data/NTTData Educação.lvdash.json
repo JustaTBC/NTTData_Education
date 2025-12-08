@@ -193,7 +193,7 @@
     },
     {
       "name": "77ad15a0",
-      "displayName": "Untitled dataset",
+      "displayName": "Histograma de Média ENADE",
       "queryLines": [
         "USE CATALOG `workspace`;\n",
         "USE SCHEMA `default`;\n",
@@ -307,7 +307,7 @@
     },
     {
       "name": "d8f404c5",
-      "displayName": "Untitled dataset",
+      "displayName": "Média por modalidade ENADE",
       "queryLines": [
         "USE CATALOG `workspace`;\n",
         "USE SCHEMA `default`;\n",
