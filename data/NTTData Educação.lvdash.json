@@ -190,6 +190,305 @@
         "FROM nttdataeducacao.gold.agg_itens_por_area\n",
         "ORDER BY total_itens DESC;\n"
       ]
+    },
+    {
+      "name": "aee508bd",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `default`;\n",
+        "\n",
+        "SELECT\n",
+        "  concat(nome_da_ies, ' — ', codigo_do_curso) AS curso_label,\n",
+        "  ROUND(media_fg,3) AS nota_fg,\n",
+        "  ROUND(media_ce,3) AS nota_ce\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "WHERE (:uf = 'ALL' OR sigla_da_uf = :uf)\n",
+        "  AND (:area = 'ALL' OR area_de_avaliacao = :area)\n",
+        "ORDER BY nota_fg DESC\n",
+        "LIMIT 20;\n",
+        "SELECT \n",
+        "  COUNT(DISTINCT codigo_do_curso) AS qtd_cursos\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "WHERE (:uf = 'ALL' OR sigla_da_uf = :uf)\n",
+        "  AND (:area = 'ALL' OR area_de_avaliacao = :area)\n",
+        "  AND (:modalidade = 'ALL' OR modalidade_de_ensino = :modalidade);\n",
+        "\n",
+        "-- Nº total de alunos valor unico\n",
+        "SELECT \n",
+        "  COALESCE(\n",
+        "    SUM(qtd_alunos),\n",
+        "    NULL\n",
+        "  ) AS total_alunos\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "WHERE (:uf = 'ALL' OR sigla_da_uf = :uf)\n",
+        "  AND (:area = 'ALL' OR area_de_avaliacao = :area)\n",
+        "  AND (:modalidade = 'ALL' OR modalidade_de_ensino = :modalidade);\n",
+        "\n",
+        "--coluna calculada\n",
+        "SELECT\n",
+        "  nome_da_ies || ' - ' || codigo_do_curso AS curso_label,\n",
+        "  media_enade_continuo\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "ORDER BY media_enade_continuo DESC\n",
+        "LIMIT 20;\n",
+        "\n",
+        "--Top N Cursos por Média ENADE, grafico de barras \n",
+        "SELECT\n",
+        "  nome_da_ies,\n",
+        "  codigo_do_curso,\n",
+        "  area_de_avaliacao,\n",
+        "  modalidade_de_ensino,\n",
+        "  ROUND(media_enade_continuo,3) AS media_enade\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "WHERE (:uf = 'ALL' OR sigla_da_uf = :uf)\n",
+        "  AND (:area = 'ALL' OR area_de_avaliacao = :area)\n",
+        "  AND (:modalidade = 'ALL' OR modalidade_de_ensino = :modalidade)\n",
+        "ORDER BY media_enade DESC\n",
+        "LIMIT CAST(:top_n AS INT);\n",
+        "\n",
+        "-- Histograma de média ENADE\n",
+        "SELECT media_enade_continuo AS nota\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "WHERE media_enade_continuo IS NOT NULL\n",
+        "  AND (:uf = 'ALL' OR sigla_da_uf = :uf)\n",
+        "  AND (:area = 'ALL' OR area_de_avaliacao = :area)\n",
+        "  AND (:modalidade = 'ALL' OR modalidade_de_ensino = :modalidade);\n",
+        "\n",
+        "--Media por modalidade\n",
+        "SELECT\n",
+        "  modalidade_de_ensino,\n",
+        "  ROUND(AVG(media_enade_continuo),3) AS media_modalidade,\n",
+        "  COUNT(DISTINCT codigo_do_curso) AS qtd_cursos\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "WHERE (:uf = 'ALL' OR sigla_da_uf = :uf)\n",
+        "  AND (:area = 'ALL' OR area_de_avaliacao = :area)\n",
+        "GROUP BY modalidade_de_ensino\n",
+        "ORDER BY media_modalidade DESC;\n",
+        "\n",
+        "--Comparação FG x CE\n",
+        "SELECT\n",
+        "  concat(nome_da_ies, ' — ', codigo_do_curso) AS curso_label,\n",
+        "  ROUND(media_fg,3) AS nota_fg,\n",
+        "  ROUND(media_ce,3) AS nota_ce\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "WHERE (:uf = 'ALL' OR sigla_da_uf = :uf)\n",
+        "  AND (:area = 'ALL' OR area_de_avaliacao = :area)\n",
+        "ORDER BY nota_fg DESC\n",
+        "LIMIT 20;\n"
+      ],
+      "parameters": [
+        {
+          "displayName": "uf",
+          "keyword": "uf",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "area",
+          "keyword": "area",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "modalidade",
+          "keyword": "modalidade",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "top_n",
+          "keyword": "top_n",
+          "dataType": "INTEGER",
+          "defaultSelection": {
+            "values": {
+              "dataType": "INTEGER",
+              "values": [
+                {
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "ano",
+          "keyword": "ano",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5620c91d",
+      "displayName": "Untitled dataset - uf domain",
+      "queryLines": [
+        "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
+      ]
+    },
+    {
+      "name": "795e28dd",
+      "displayName": "Untitled dataset - area domain",
+      "queryLines": [
+        "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
+      ]
+    },
+    {
+      "name": "2575af6e",
+      "displayName": "Untitled dataset - modalidade domain",
+      "queryLines": [
+        "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
+      ]
+    },
+    {
+      "name": "77ad15a0",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `default`;\n",
+        "\n",
+        "-- Histograma de média ENADE\n",
+        "SELECT media_enade_continuo AS nota\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "WHERE media_enade_continuo IS NOT NULL\n",
+        "  AND (:uf = 'ALL' OR sigla_da_uf = :uf)\n",
+        "  AND (:area = 'ALL' OR area_de_avaliacao = :area)\n",
+        "  AND (:modalidade = 'ALL' OR modalidade_de_ensino = :modalidade);"
+      ],
+      "parameters": [
+        {
+          "displayName": "uf",
+          "keyword": "uf",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "area",
+          "keyword": "area",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "modalidade",
+          "keyword": "modalidade",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "ano",
+          "keyword": "ano",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "top_n",
+          "keyword": "top_n",
+          "dataType": "INTEGER",
+          "defaultSelection": {
+            "values": {
+              "dataType": "INTEGER",
+              "values": [
+                {
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a05be2b7",
+      "displayName": "Untitled dataset - uf domain",
+      "queryLines": [
+        "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
+      ]
+    },
+    {
+      "name": "b65bd94f",
+      "displayName": "Untitled dataset - area domain",
+      "queryLines": [
+        "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
+      ]
+    },
+    {
+      "name": "d3c24246",
+      "displayName": "Untitled dataset - modalidade domain",
+      "queryLines": [
+        "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
+      ]
     }
   ],
   "pages": [
@@ -594,6 +893,53 @@
           "position": {
             "x": 0,
             "y": 17,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "ca500800",
+            "queries": [
+              {
+                "name": "6d7924698b074f259bc204e800e920e0",
+                "query": {
+                  "datasetName": "77ad15a0",
+                  "fields": [
+                    {
+                      "name": "nota_BIN",
+                      "expression": "COUNT(`nota`)"
+                    },
+                    {
+                      "name": "nota_BIN_LOWER_BOUND",
+                      "expression": "COUNT(`nota`)"
+                    },
+                    {
+                      "name": "nota_BIN_STEP",
+                      "expression": "COUNT(`nota`)"
+                    },
+                    {
+                      "name": "COUNT",
+                      "expression": "COUNT(`nota`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 0,
+              "viz_spec": {
+                "display_name": "Histograma_media_ENADE",
+                "viz_type": "CHART",
+                "serialized_options": "{\"series\":{\"error_y\":{\"type\":\"data\",\"visible\":true},\"stacking\":null},\"coefficient\":1,\"yAxis\":[{\"title\":{\"text\":\" N.º de IES\"},\"type\":\"-\"},{\"opposite\":true,\"type\":\"-\"}],\"columnConfigurationMap\":{\"x\":{\"column\":\"nota\",\"id\":\"column_ab64136364\"}},\"alignYAxesAtZero\":true,\"direction\":{\"type\":\"counterclockwise\"},\"swappedAxes\":false,\"percentFormat\":\"0[.]00%\",\"textFormat\":\"\",\"legend\":{\"traceorder\":\"normal\"},\"globalSeriesType\":\"histogram\",\"numBins\":10,\"version\":2,\"sizemode\":\"diameter\",\"seriesOptions\":{},\"error_y\":{\"type\":\"data\",\"visible\":true},\"sortX\":true,\"showDataLabels\":false,\"missingValuesAsZero\":true,\"useAggregationsUi\":true,\"numberFormat\":\"0,0.[00000]\",\"dateTimeFormat\":\"DD/MM/YYYY HH:mm\",\"sortY\":true,\"valuesOptions\":{},\"xAxis\":{\"labels\":{\"enabled\":true},\"title\":{\"text\":\"Média ENADE\"},\"type\":\"-\"}}",
+                "query_name": "6d7924698b074f259bc204e800e920e0"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 23,
             "width": 3,
             "height": 6
           }
