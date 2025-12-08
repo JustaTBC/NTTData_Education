@@ -63,24 +63,20 @@
       "name": "ae7128a4",
       "displayName": "Top 10 Escolas",
       "queryLines": [
-        "USE CATALOG `nttdataeducacao`;\n",
-        "USE SCHEMA `gold`;\n",
-        "\n",
         "SELECT \n",
-        "    -- 1. Cria um rótulo legível: \"Nome da Cidade (ID: 12345)\"\n",
-        "    concat(school_city, ' (ID: ', cast(school_id as string), ')') as escola_label,\n",
-        "    school_state,\n",
+        "    -- 1. O Nome Real da Escola (Fica perfeito no eixo Y)\n",
+        "    nome_escola as escola_label,\n",
         "    \n",
-        "    -- 2. A nota média para o tamanho da barra\n",
-        "    (media_escola_total / 5) as media_padrao_enem\n",
+        "    -- 2. A Cidade (Trouxe separada caso queira mostrar no mouse-over)\n",
+        "    school_city,\n",
         "\n",
-        "FROM nttdataeducacao.gold.agg_ranking_escolas\n",
+        "    -- 3. A nota média na escala 0-1000\n",
+        "    -- Pegamos o Total (que é ~4000) e dividimos por 5\n",
+        "    round(Nota_Total_Ranking / 5, 2) as media_padrao_enem\n",
         "\n",
-        "WHERE school_id is not null  -- Remove alunos sem escola definida\n",
+        "FROM nttdataeducacao.gold.agg_ranking_top10_final\n",
         "\n",
-        "ORDER BY media_escola_total DESC -- Ordena do maior para o menor\n",
-        "\n",
-        "LIMIT 10 -- Pega apenas as 10 melhores para o gráfico não quebrar"
+        "ORDER BY media_padrao_enem DESC"
       ]
     },
     {
@@ -723,7 +719,7 @@
                 }
               },
               "frame": {
-                "title": "Visualization 1",
+                "title": "Média das Matérias",
                 "showTitle": true
               },
               "mark": {
@@ -734,7 +730,7 @@
           "position": {
             "x": 3,
             "y": 0,
-            "width": 3,
+            "width": 2,
             "height": 6
           }
         },
@@ -747,6 +743,10 @@
                 "query": {
                   "datasetName": "ae7128a4",
                   "fields": [
+                    {
+                      "name": "school_city",
+                      "expression": "`school_city`"
+                    },
                     {
                       "name": "sum(media_padrao_enem)",
                       "expression": "SUM(`media_padrao_enem`)"
@@ -786,7 +786,12 @@
                 },
                 "label": {
                   "show": true
-                }
+                },
+                "extra": [
+                  {
+                    "fieldName": "school_city"
+                  }
+                ]
               },
               "frame": {
                 "title": "Top 10 Escolas - Média Geral",
@@ -803,7 +808,7 @@
           "position": {
             "x": 0,
             "y": 6,
-            "width": 6,
+            "width": 2,
             "height": 5
           }
         },
@@ -913,7 +918,7 @@
             "name": "4dc8ff72",
             "queries": [
               {
-                "name": "07598521bf104a9fbce4b199653be62d",
+                "name": "main_query",
                 "query": {
                   "datasetName": "19aaabdb",
                   "fields": [
@@ -922,7 +927,7 @@
                       "expression": "`area_extensa`"
                     },
                     {
-                      "name": "column_c1a5d3a5213",
+                      "name": "sum(total_itens)",
                       "expression": "SUM(`total_itens`)"
                     }
                   ],
@@ -931,19 +936,35 @@
               }
             ],
             "spec": {
-              "version": 0,
-              "viz_spec": {
-                "display_name": "Visualization 1",
-                "viz_type": "CHART",
-                "serialized_options": "{\"isAggregationOn\":true,\"series\":{\"error_y\":{\"type\":\"data\",\"visible\":true},\"stacking\":null},\"coefficient\":1,\"yAxis\":[{\"type\":\"-\"},{\"opposite\":true,\"type\":\"-\"}],\"columnConfigurationMap\":{\"x\":{\"column\":\"area_extensa\",\"id\":\"column_c1a5d3a5211\"},\"y\":[{\"column\":\"total_itens\",\"id\":\"column_c1a5d3a5213\",\"transform\":\"SUM\"}]},\"alignYAxesAtZero\":true,\"direction\":{\"type\":\"counterclockwise\"},\"swappedAxes\":false,\"percentFormat\":\"0[.]00%\",\"textFormat\":\"\",\"legend\":{\"traceorder\":\"normal\"},\"globalSeriesType\":\"column\",\"version\":2,\"sizemode\":\"diameter\",\"seriesOptions\":{\"column_c1a5d3a5213\":{\"type\":\"column\",\"yAxis\":0}},\"error_y\":{\"type\":\"data\",\"visible\":true},\"sortX\":true,\"showDataLabels\":false,\"missingValuesAsZero\":true,\"useAggregationsUi\":true,\"numberFormat\":\"0,0.[00000]\",\"dateTimeFormat\":\"DD/MM/YYYY HH:mm\",\"sortY\":true,\"valuesOptions\":{},\"xAxis\":{\"labels\":{\"enabled\":true},\"type\":\"-\"}}",
-                "query_name": "07598521bf104a9fbce4b199653be62d"
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "area_extensa",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_itens)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "title": "Dificuldade dos Itens",
+                "showTitle": true
+              },
+              "mark": {
+                "layout": "group"
               }
             }
           },
           "position": {
             "x": 0,
             "y": 17,
-            "width": 3,
+            "width": 2,
             "height": 6
           }
         },
@@ -952,25 +973,17 @@
             "name": "ca500800",
             "queries": [
               {
-                "name": "6d7924698b074f259bc204e800e920e0",
+                "name": "main_query",
                 "query": {
                   "datasetName": "77ad15a0",
                   "fields": [
                     {
-                      "name": "nota_BIN",
-                      "expression": "COUNT(`nota`)"
+                      "name": "nota",
+                      "expression": "`nota`"
                     },
                     {
-                      "name": "nota_BIN_LOWER_BOUND",
-                      "expression": "COUNT(`nota`)"
-                    },
-                    {
-                      "name": "nota_BIN_STEP",
-                      "expression": "COUNT(`nota`)"
-                    },
-                    {
-                      "name": "COUNT",
-                      "expression": "COUNT(`nota`)"
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
                     }
                   ],
                   "disaggregated": false
@@ -978,19 +991,43 @@
               }
             ],
             "spec": {
-              "version": 0,
-              "viz_spec": {
-                "display_name": "Histograma_media_ENADE",
-                "viz_type": "CHART",
-                "serialized_options": "{\"series\":{\"error_y\":{\"type\":\"data\",\"visible\":true},\"stacking\":null},\"coefficient\":1,\"yAxis\":[{\"title\":{\"text\":\" N.º de IES\"},\"type\":\"-\"},{\"opposite\":true,\"type\":\"-\"}],\"columnConfigurationMap\":{\"x\":{\"column\":\"nota\",\"id\":\"column_ab64136364\"}},\"alignYAxesAtZero\":true,\"direction\":{\"type\":\"counterclockwise\"},\"swappedAxes\":false,\"percentFormat\":\"0[.]00%\",\"textFormat\":\"\",\"legend\":{\"traceorder\":\"normal\"},\"globalSeriesType\":\"histogram\",\"numBins\":10,\"version\":2,\"sizemode\":\"diameter\",\"seriesOptions\":{},\"error_y\":{\"type\":\"data\",\"visible\":true},\"sortX\":true,\"showDataLabels\":false,\"missingValuesAsZero\":true,\"useAggregationsUi\":true,\"numberFormat\":\"0,0.[00000]\",\"dateTimeFormat\":\"DD/MM/YYYY HH:mm\",\"sortY\":true,\"valuesOptions\":{},\"xAxis\":{\"labels\":{\"enabled\":true},\"title\":{\"text\":\"Média ENADE\"},\"type\":\"-\"}}",
-                "query_name": "6d7924698b074f259bc204e800e920e0"
+              "version": 3,
+              "widgetType": "histogram",
+              "encodings": {
+                "x": {
+                  "fieldName": "nota",
+                  "axis": {
+                    "title": "Média ENADE"
+                  },
+                  "displayName": "Média ENADE",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(*)",
+                  "axis": {
+                    "title": " N.º de IES"
+                  },
+                  "displayName": " N.º de IES",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "mark": {
+                "layout": "layer"
+              },
+              "frame": {
+                "title": "Histograma Média Enade",
+                "showTitle": true
               }
             }
           },
           "position": {
             "x": 0,
             "y": 23,
-            "width": 6,
+            "width": 2,
             "height": 7
           }
         },
@@ -1033,7 +1070,7 @@
           "position": {
             "x": 0,
             "y": 30,
-            "width": 6,
+            "width": 2,
             "height": 7
           }
         }
