@@ -489,6 +489,123 @@
       "queryLines": [
         "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
       ]
+    },
+    {
+      "name": "d8f404c5",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `default`;\n",
+        "\n",
+        "--Media por modalidade\n",
+        "SELECT\n",
+        "  modalidade_de_ensino,\n",
+        "  ROUND(AVG(media_enade_continuo),3) AS media_modalidade,\n",
+        "  COUNT(DISTINCT codigo_do_curso) AS qtd_cursos\n",
+        "FROM nttdataeducacao.gold.enade_curso\n",
+        "WHERE (:uf = 'ALL' OR sigla_da_uf = :uf)\n",
+        "  AND (:area = 'ALL' OR area_de_avaliacao = :area)\n",
+        "GROUP BY modalidade_de_ensino\n",
+        "ORDER BY media_modalidade DESC;"
+      ],
+      "parameters": [
+        {
+          "displayName": "uf",
+          "keyword": "uf",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "area",
+          "keyword": "area",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "ano",
+          "keyword": "ano",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "top_n",
+          "keyword": "top_n",
+          "dataType": "INTEGER",
+          "defaultSelection": {
+            "values": {
+              "dataType": "INTEGER",
+              "values": [
+                {
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "modalidade",
+          "keyword": "modalidade",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4cd3116f",
+      "displayName": "Untitled dataset - uf domain",
+      "queryLines": [
+        "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
+      ]
+    },
+    {
+      "name": "0e47ff22",
+      "displayName": "Untitled dataset - area domain",
+      "queryLines": [
+        "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
+      ]
+    },
+    {
+      "name": "a0c738ec",
+      "displayName": "Untitled dataset - modalidade domain",
+      "queryLines": [
+        "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
+      ]
     }
   ],
   "pages": [
@@ -940,6 +1057,49 @@
           "position": {
             "x": 0,
             "y": 23,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "3867887f",
+            "queries": [
+              {
+                "name": "96d08accada34657845d22d9860effd3",
+                "query": {
+                  "datasetName": "d8f404c5",
+                  "fields": [
+                    {
+                      "name": "media_modalidade",
+                      "expression": "`media_modalidade`"
+                    },
+                    {
+                      "name": "qtd_cursos",
+                      "expression": "`qtd_cursos`"
+                    },
+                    {
+                      "name": "modalidade_de_ensino",
+                      "expression": "`modalidade_de_ensino`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 0,
+              "viz_spec": {
+                "display_name": "media_modalidade",
+                "viz_type": "CHART",
+                "serialized_options": "{\"series\":{\"error_y\":{\"type\":\"data\",\"visible\":true},\"stacking\":null},\"coefficient\":1,\"hideXAxis\":false,\"yAxis\":[{\"title\":{\"text\":\"Cursos\"},\"type\":\"-\"},{\"opposite\":true,\"title\":{\"text\":null},\"type\":\"-\"}],\"columnConfigurationMap\":{\"series\":{\"column\":\"modalidade_de_ensino\",\"id\":\"column_ab64136393\"},\"x\":{\"column\":\"media_modalidade\",\"id\":\"column_ab64136391\"},\"y\":[{\"column\":\"qtd_cursos\",\"id\":\"column_ab64136392\"}]},\"alignYAxesAtZero\":true,\"direction\":{\"type\":\"counterclockwise\"},\"swappedAxes\":false,\"percentFormat\":\"0[.]00%\",\"textFormat\":\"\",\"legend\":{\"traceorder\":\"normal\"},\"globalSeriesType\":\"scatter\",\"version\":2,\"sizemode\":\"diameter\",\"seriesOptions\":{\"column_ab64136392\":{\"name\":\"qtd_cursos\",\"yAxis\":0},\"educação a distância\":{\"color\":\"#FF3621\"},\"educação presencial\":{\"color\":\"#8BCAE7\"},\"null\":{\"yAxis\":0}},\"error_y\":{\"type\":\"data\",\"visible\":true},\"sortX\":true,\"showDataLabels\":true,\"missingValuesAsZero\":true,\"useAggregationsUi\":true,\"numberFormat\":\"0,0.[00000]\",\"dateTimeFormat\":\"DD/MM/YYYY HH:mm\",\"sortY\":true,\"valuesOptions\":{},\"xAxis\":{\"labels\":{\"enabled\":true},\"title\":{\"text\":\"Média por modalidade\"},\"type\":\"-\"}}",
+                "query_name": "96d08accada34657845d22d9860effd3"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 29,
             "width": 3,
             "height": 6
           }
