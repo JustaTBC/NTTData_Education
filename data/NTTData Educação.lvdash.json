@@ -108,12 +108,12 @@
         "    media_escola_total\n",
         "\n",
         "FROM nttdataeducacao.gold.agg_ranking_escolas\n",
-        "WHERE school_id <> -1\n",
+        "WHERE school_id IS NOT NULL\n",
         "\n",
         "-- O Filtro do Dashboard vai ser injetado automagicamente AQUI pelo Databricks\n",
         "\n",
         "ORDER BY media_escola_total DESC\n",
-        "LIMIT 100"
+        "LIMIT 10"
       ]
     },
     {
