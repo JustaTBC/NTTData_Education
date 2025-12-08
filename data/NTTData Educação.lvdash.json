@@ -286,21 +286,21 @@
     },
     {
       "name": "a05be2b7",
-      "displayName": "Untitled dataset - uf domain",
+      "displayName": "parametro_histograma - uf domain",
       "queryLines": [
         "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
       ]
     },
     {
       "name": "b65bd94f",
-      "displayName": "Untitled dataset - area domain",
+      "displayName": "parametro_histograma - area domain",
       "queryLines": [
         "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
       ]
     },
     {
       "name": "d3c24246",
-      "displayName": "Untitled dataset - modalidade domain",
+      "displayName": "parametro_histograma - modalidade domain",
       "queryLines": [
         "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
       ]
@@ -403,21 +403,21 @@
     },
     {
       "name": "4cd3116f",
-      "displayName": "Untitled dataset - uf domain",
+      "displayName": "parametro_media_modalidade - uf domain",
       "queryLines": [
         "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
       ]
     },
     {
       "name": "0e47ff22",
-      "displayName": "Untitled dataset - area domain",
+      "displayName": "parametro_media_modalidade - area domain",
       "queryLines": [
         "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
       ]
     },
     {
       "name": "a0c738ec",
-      "displayName": "Untitled dataset - modalidade domain",
+      "displayName": "parametro_media_modalidade - modalidade domain",
       "queryLines": [
         "FROM ( VALUES ('ALL') ) AS domain(values) SELECT values"
       ]
