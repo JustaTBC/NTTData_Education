@@ -92,9 +92,9 @@ O projeto entrega uma base analítica sólida e dashboards focados em insights:
 
 ---
 ## 🧑‍💻 Equipe
-* Heitor Didier
-* Luiz Felipe
-* Marcus Vinicius
-* Nicolly Rodrigues
-* Pedro Armando
-* Thomaz Barros
+- **Heitor Didier** — [Eito2511](https://github.com/Eito2511)  
+- **Luiz Felipe** — [LuizMXavier](https://github.com/LuizMXavier)  
+- **Marcus Vinicius** — [Marcus-Vini-Tavares](https://github.com/Marcus-Vini-Tavares)  
+- **Nicolly Rodrigues** — [nicky89ck](https://github.com/nicky89ck)  
+- **Pedro Armando** — [pedrosol-dev](https://github.com/pedrosol-dev)  
+- **Thomaz Barros** — [JustaTBC](https://github.com/JustaTBC)  
