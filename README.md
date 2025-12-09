@@ -50,9 +50,16 @@ Os dados foram unificados a partir das seguintes fontes públicas:
 
 | Categoria | Ferramentas |
 | :--- | :--- |
+|**Ferramenta** | Trello | 
 | **Engenharia de Dados** | Python, PySpark, Pandas |
 | **Ambiente de Processamento** | Databricks |
 | **Controle de Versões** | Git e GitHub |
+
+---
+
+## Trello 
+
+[Trello]([URL_do_link](https://trello.com/invite/b/69389d43de998ebc7554f3de/ATTI9d70138e4ec892683771eb552bf6acae127C59F0/kanban-quadro-modelo))
 
 ---
 
