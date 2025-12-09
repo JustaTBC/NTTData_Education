@@ -1,1 +1,100 @@
-🚀 Solução Analítica Educacional: Infraestrutura e Desempenho (NTT DATA - Grupo 8)🌟 Visão Geral do ProjetoEste projeto, desenvolvido pelo Grupo 8 da Residência NTT DATA + Porto Digital (2º Semestre 2025), apresenta um Data Lakehouse completo focado no setor educacional brasileiro11.Nosso objetivo foi unificar dados públicos do INEP, ENEM e ENADE2para correlacionar a infraestrutura escolar com o desempenho acadêmico 3, fornecendo uma base sólida para a tomada de decisões estratégicas e políticas públicas444.🎯 Desafios de Negócio EndereçadosO projeto resolve dores críticas no setor, transformando dados dispersos em inteligência acionável5:DorSolução AnalíticaDeterminar se uma instituição está entre as 10 melhores do país (Benchmarking)6.Dashboard de Top 10 de escolas, permitindo análise e comparação direta7.Correlacionar a qualidade da infraestrutura (biblioteca, internet, laboratórios) com o desempenho (ENEM/ENADE)8.Data Lakehouse Unificado: Integração de bases de infraestrutura e desempenho educacional9.Identificar a melhor modalidade de ensino (Presencial, EAD, Híbrida) para entrada de uma universidade estrangeira no Brasil10.Análise detalhada das médias e distribuições ENADE por modalidade11.🏗️ Arquitetura da Solução (Medalhão)Adotamos a Arquitetura Medalhão (Bronze, Silver, Gold) para garantir a qualidade, confiabilidade e estruturação progressiva dos dados:CamadaFunçãoExemplo de ProcessoBronze (Bruto)Repositório de dados originais.Recebimento dos dados brutos e padronização de schemas iniciais.Silver (Limpo/Enriquecido)Limpeza e consolidação.Tratamento de inconsistências, Joins entre bases e reorganização das bases.Gold (Curado/Negócio)Modelagem e agregação final.Criação de tabelas analíticas, métricas finais, prontas para BI e dashboards.Bases de Dados Integradas12UM: RESULTADOS_2024 ,ITENS_PROVA_2024Censo Escolar (INEP): HAD_ESCOLAS_2024ENADE: conceito_enade_2023🛠️ Conjunto de TecnologiasEngenharia de Dados: Python, PySpark, PandasAmbiente: Jupyter Notebook, VS CodeControle de versões: Git e GitHubVisualização (BI): Power BI / Looker Studio / Tableau📈 Resultados e EntregáveisO projeto entrega uma base analítica sólida e dashboards focados em insights:Data Lakehouse completo preparado para expansão.Dashboards de Ranking: Top 10 escolas e análises de notas ENEM.Análise de Correlação: Comparação entre infraestrutura × desempenho.Base Analítica: Sólida para o desenvolvimento de políticas públicas educacionais.
+# 🚀 Solução Analítica Educacional: Infraestrutura e Desempenho (NTT DATA - Grupo 8)
+## 🌟 Visão Geral do Projeto
+
+Este projeto, desenvolvido pelo Grupo 8 da Residência NTT DATA + Porto Digital + Cesar School (2º Semestre 2025), apresenta um Data Lakehouse completo focado no setor educacional brasileiro.
+
+Nosso objetivo foi unificar dados públicos do INEP, ENEM e ENADE para correlacionar a infraestrutura escolar com o desempenho acadêmico, fornecendo uma base sólida para a tomada de decisões estratégicas e políticas públicas.
+
+## 💡 Justificativa do Projeto: O Cenário Atual da Educação
+A educação no país passa por uma grande transformação, impulsionada por exames e indicadores nacionais que avaliam tanto o final da educação básica quanto o ensino superior. Esses indicadores orientam o acesso à faculdade, a oferta de vagas, bolsas e financiamentos, além de ajudarem a medir a qualidade dos cursos.
+
+O impacto da pandemia acelerou drasticamente a adoção da tecnologia, forçando a migração para o ensino on-line e abrindo espaço para modelos híbridos. No entanto, essa mudança também escancarou desigualdades de acesso a equipamentos, internet e condições adequadas de estudo em casa.
+
+Desafios do Cenário Misto:
+
+* Ensino Presencial: Persistência de problemas de infraestrutura e grandes diferenças de qualidade entre regiões.
+
+* Ensino a Distância (EAD): Questões de engajamento, alta evasão e a necessidade de garantir a qualidade dos cursos, somadas à limitação tecnológica de muitos estudantes.
+
+Essa combinação de mudanças, oportunidades e desafios é o ponto central do nosso projeto, justificando a necessidade de uma análise de dados robusta e integrada.
+
+---
+
+## 🏗️ Arquitetura da Solução (Medalhão)
+
+Adotamos a Arquitetura Medalhão (Bronze, Silver, Gold) para garantir a qualidade, confiabilidade e estruturação progressiva dos dados:
+
+Bronze (Bruto)
+* Função: Recebimento dos dados brutos e Armazenamento inicial.
+* Processo: Padronização de schemas.
+
+Silver (Limpo/Enriquecido)
+* Função: Limpeza e consolidação.
+* Processo: Tratamento de inconsistências, Joins e reorganização das bases.
+
+Gold (Curado/Negócio)
+* Função: Modelagem e agregação final.
+* Processo: Criação de tabelas analíticas e dados prontos para visualização e dashboards.
+
+![Arquitetura Medalhão](https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcQysgVi_7ri5r2fzjja-AJmPcdvXZ4MCRM8BbPQVbLkXYmJTA6_VYnECcn2WgFh0f-qA0I0p0woB8ArR853lGoLPbizElzs_qJ-17-kn61jEaZYwqo)
+
+## Bases de Dados Integradas
+
+* UM: **RESULTADOS_2024** , **ITENS_PROVA_2024**
+
+* Censo Escolar (INEP): **HAD_ESCOLAS_2024**
+
+* ENADE: **conceito_enade_2023**
+
+---
+
+## 🛠️ Conjunto de Tecnologias
+
+Engenharia de Dados:
+
+* Python
+* PySpark
+* Pandas
+
+Ambiente:
+
+* Databricks
+
+Controle de Versões:
+
+* Git e GitHub
+
+## 📊 Dashboards
+
+Os dashboards desenvolvidos incluem:
+
+* Ranking Top 10 de escolas
+
+* Comparação entre infraestrutura × desempenho
+
+* Histogramas e distribuições ENADE
+
+* Análises de notas ENEM
+
+* Correlações por modalidade de ensino
+
+## 📈 Resultados e Entregáveis
+
+O projeto entrega uma base analítica sólida e dashboards focados em insights:
+
+* Data Lakehouse completo preparado para expansão.
+
+* Dashboards de Ranking: Top 10 escolas e análises de notas ENEM.
+
+* Análise de Correlação: Comparação entre infraestrutura × desempenho.
+
+* Base Analítica: Sólida para o desenvolvimento de políticas públicas educacionais.
+
+---
+## 🧑‍💻 Equipe
+* Heitor Didier
+* Luiz Felipe
+* Marcus Vinicius
+* Nicolly Rodrigues
+* Pedro Armando
+* Thomaz Barros
