@@ -1,100 +1,83 @@
-# 🚀 Solução Analítica Educacional: Infraestrutura e Desempenho (NTT DATA - Grupo 8)
+# 🚀 Solução Analítica Educacional: Infraestrutura e Desempenho
+## Grupo 8 - Residência NTT DATA + Porto Digital + Cesar School (2º Semestre 2025)
+
+[![Status](https://img.shields.io/badge/Status-Conclu%C3%ADdo-brightgreen)](https://github.com/JustaTBC/NTTData_Education)
+[![Tecnologias](https://img.shields.io/badge/Tecnologias-Python%20%7C%20PySpark%20%7C%20Databricks-blue)](https://github.com/JustaTBC/NTTData_Education)
+
 ## 🌟 Visão Geral do Projeto
 
-Este projeto, desenvolvido pelo Grupo 8 da Residência NTT DATA + Porto Digital + Cesar School (2º Semestre 2025), apresenta um Data Lakehouse completo focado no setor educacional brasileiro.
+Este projeto apresenta um **Data Lakehouse completo** focado no setor educacional brasileiro.
 
-Nosso objetivo foi unificar dados públicos do INEP, ENEM e ENADE para correlacionar a infraestrutura escolar com o desempenho acadêmico, fornecendo uma base sólida para a tomada de decisões estratégicas e políticas públicas.
+Desenvolvido pelo Grupo 8 da Residência NTT DATA + Porto Digital + Cesar School (2º Semestre 2025), nosso objetivo foi unificar dados públicos do **INEP, ENEM e ENADE** para correlacionar a **infraestrutura escolar com o desempenho acadêmico**. O resultado é uma base sólida para a tomada de decisões estratégicas e políticas públicas no setor.
 
-## 💡 Justificativa do Projeto: O Cenário Atual da Educação
-A educação no país passa por uma grande transformação, impulsionada por exames e indicadores nacionais que avaliam tanto o final da educação básica quanto o ensino superior. Esses indicadores orientam o acesso à faculdade, a oferta de vagas, bolsas e financiamentos, além de ajudarem a medir a qualidade dos cursos.
+---
 
-O impacto da pandemia acelerou drasticamente a adoção da tecnologia, forçando a migração para o ensino on-line e abrindo espaço para modelos híbridos. No entanto, essa mudança também escancarou desigualdades de acesso a equipamentos, internet e condições adequadas de estudo em casa.
+## 💡 Justificativa: O Cenário Misto da Educação
 
-Desafios do Cenário Misto:
+A educação no país enfrenta uma transformação acelerada, impulsionada por exames nacionais (ENEM, ENADE) e pela migração tecnológica pós-pandemia.
 
-* Ensino Presencial: Persistência de problemas de infraestrutura e grandes diferenças de qualidade entre regiões.
+Os desafios do cenário misto (presencial e EAD) exigem análises robustas:
 
-* Ensino a Distância (EAD): Questões de engajamento, alta evasão e a necessidade de garantir a qualidade dos cursos, somadas à limitação tecnológica de muitos estudantes.
+* **Ensino Presencial:** Persistência de problemas de **infraestrutura** e grandes diferenças de qualidade entre regiões.
+* **Ensino a Distância (EAD):** Questões de engajamento, alta evasão e desigualdades de **acesso a equipamentos e internet**.
 
-Essa combinação de mudanças, oportunidades e desafios é o ponto central do nosso projeto, justificando a necessidade de uma análise de dados robusta e integrada.
+Essa combinação de mudanças, oportunidades e desafios é o ponto central que justifica a necessidade de uma análise de dados robusta e integrada, fornecida por este projeto.
 
 ---
 
 ## 🏗️ Arquitetura da Solução (Medalhão)
 
-Adotamos a Arquitetura Medalhão (Bronze, Silver, Gold) para garantir a qualidade, confiabilidade e estruturação progressiva dos dados:
+Adotamos a **Arquitetura Medalhão (Bronze, Silver, Gold)** para garantir a qualidade, confiabilidade e estruturação progressiva dos dados:
 
-Bronze (Bruto)
-* Função: Recebimento dos dados brutos e Armazenamento inicial.
-* Processo: Padronização de schemas.
+| Camada | Função | Processos-Chave |
+| :--- | :--- | :--- |
+| **Bronze (Bruto)** | Recebimento dos dados brutos e Armazenamento inicial. | Padronização de schemas (Schema Enforcement). |
+| **Silver (Limpo/Enriquecido)** | Limpeza e consolidação de dados. | Tratamento de inconsistências, Joins e reorganização das bases. |
+| **Gold (Curado/Negócio)** | Modelagem e agregação final para o negócio. | Criação de tabelas analíticas e dados prontos para visualização (Dashboards). |
 
-Silver (Limpo/Enriquecido)
-* Função: Limpeza e consolidação.
-* Processo: Tratamento de inconsistências, Joins e reorganização das bases.
+### Bases de Dados Integradas
 
-Gold (Curado/Negócio)
-* Função: Modelagem e agregação final.
-* Processo: Criação de tabelas analíticas e dados prontos para visualização e dashboards.
+Os dados foram unificados a partir das seguintes fontes públicas:
 
-![Arquitetura Medalhão](https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcQysgVi_7ri5r2fzjja-AJmPcdvXZ4MCRM8BbPQVbLkXYmJTA6_VYnECcn2WgFh0f-qA0I0p0woB8ArR853lGoLPbizElzs_qJ-17-kn61jEaZYwqo)
+* **ENEM:** `RESULTADOS_2024` e `ITENS_PROVA_2024`
+* **Censo Escolar (INEP):** `HAD_ESCOLAS_2024`
+* **ENADE:** `conceito_enade_2023`
 
-## Bases de Dados Integradas
-
-* UM: **RESULTADOS_2024** , **ITENS_PROVA_2024**
-
-* Censo Escolar (INEP): **HAD_ESCOLAS_2024**
-
-* ENADE: **conceito_enade_2023**
+![Diagrama da Arquitetura Medalhão](https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcQysgVi_7ri5r2fzjja-AJmPcdvXZ4MCRM8BbPQVbLkXYmJTA6_VYnECcn2WgFh0f-qA0I0p0woB8ArR853lGoLPbizElzs_qJ-17-kn61jEaZYwqo)
 
 ---
 
 ## 🛠️ Conjunto de Tecnologias
 
-Engenharia de Dados:
+| Categoria | Ferramentas |
+| :--- | :--- |
+| **Engenharia de Dados** | Python, PySpark, Pandas |
+| **Ambiente de Processamento** | Databricks |
+| **Controle de Versões** | Git e GitHub |
 
-* Python
-* PySpark
-* Pandas
+---
 
-Ambiente:
+## 📊 Resultados e Entregáveis
 
-* Databricks
+O projeto entrega uma base analítica sólida e **Dashboards** focados em insights estratégicos:
 
-Controle de Versões:
-
-* Git e GitHub
-
-## 📊 Dashboards
-
-Os dashboards desenvolvidos incluem:
-
-* Ranking Top 10 de escolas
-
-* Comparação entre infraestrutura × desempenho
-
-* Histogramas e distribuições ENADE
-
-* Análises de notas ENEM
-
-* Correlações por modalidade de ensino
-
-## 📈 Resultados e Entregáveis
-
-O projeto entrega uma base analítica sólida e dashboards focados em insights:
-
-* Data Lakehouse completo preparado para expansão.
-
-* Dashboards de Ranking: Top 10 escolas e análises de notas ENEM.
-
-* Análise de Correlação: Comparação entre infraestrutura × desempenho.
-
-* Base Analítica: Sólida para o desenvolvimento de políticas públicas educacionais.
+* **Data Lakehouse Completo:** Base de dados curada e preparada para expansão.
+* **Análise de Correlação:** Comparação direta entre infraestrutura escolar e desempenho acadêmico (ENEM/ENADE).
+* **Dashboards:**
+    * Ranking Top 10 de escolas.
+    * Histogramas e distribuições ENADE.
+    * Análises de notas ENEM.
+    * Correlações por modalidade de ensino.
+* **Base Analítica:** Informação sólida para embasar o desenvolvimento de políticas públicas educacionais.
 
 ---
 ## 🧑‍💻 Equipe
-- **Heitor Didier** — [Eito2511](https://github.com/Eito2511)  
-- **Luiz Felipe** — [LuizMXavier](https://github.com/LuizMXavier)  
-- **Marcus Vinicius** — [Marcus-Vini-Tavares](https://github.com/Marcus-Vini-Tavares)  
-- **Nicolly Rodrigues** — [nicky89ck](https://github.com/nicky89ck)  
-- **Pedro Armando** — [pedrosol-dev](https://github.com/pedrosol-dev)  
-- **Thomaz Barros** — [JustaTBC](https://github.com/JustaTBC)  
+
+| Nome | GitHub |
+| :--- | :--- |
+| **Heitor Didier** | [Eito2511](https://github.com/Eito2511) |
+| **Luiz Felipe** | [LuizMXavier](https://github.com/LuizMXavier) |
+| **Marcus Vinicius** | [Marcus-Vini-Tavares](https://github.com/Marcus-Vini-Tavares) |
+| **Nicolly Rodrigues** | [nicky89ck](https://github.com/nicky89ck) |
+| **Pedro Armando** | [pedrosol-dev](https://github.com/pedrosol-dev) |
+| **Thomaz Barros** | [JustaTBC](https://github.com/JustaTBC) |
